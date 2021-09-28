@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">m3u8downloader</string>
+    <string name="hint_url">Download URL</string>
+    <string name="hint_delete_slice_switch">下载后删除分片</string>
+    <string name="hint_auto_skip_ads">自动跳过广告</string>
+    <string name="current_progress_hint">当前进度：</string>
+    <string name="current_progress_numb">0/0</string>
+    <string name="current_state_hint">当前状态：</string>
+    <string name="current_state_text">空闲</string>
+    <string name="open_in_explorer">使用文件管理器打开</string>
+    <string name="toolbar_title_text">M3U8视频下载器</string>
+    <string name="start_download">开始下载</string>
+    <string name="stop_download">取消下载</string>
+    <string name="menu_home">主页</string>
+    <string name="menu_list">视频列表</string>
+    <string name="content_description">删除视频</string>
+    <string name="label_download_loc">下载位置</string>
+    <string name="download_loc_inner">应用目录</string>
+    <string name="download_loc_outer">/Download 目录</string>
+</resources>
