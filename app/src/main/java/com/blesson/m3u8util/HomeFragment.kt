@@ -1,9 +1,6 @@
 package com.blesson.m3u8util
 
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
+import android.os.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +8,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
+import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class HomeFragment : Fragment() {
@@ -45,13 +43,14 @@ class HomeFragment : Fragment() {
         val stopBtn : MaterialCardView = view.findViewById(R.id.btn_stop_download)
         val dInnerBtn: Chip = view.findViewById(R.id.btn_loc_inner)
         val dOuterBtn: Chip = view.findViewById(R.id.btn_loc_outer)
+        val threadNumSlider: Slider = view.findViewById(R.id.thread_num_slider)
 
         val mHandler = Handler(Looper.getMainLooper()) {
             when (it.what) {
                 1 -> {  // 下载中
                     val sliceIndex = it.arg1
                     val sliceTotal = it.arg2
-                    val progressNum: String = "$sliceIndex/$sliceTotal"
+                    val progressNum = "$sliceIndex/$sliceTotal"
                     progressBar.max = sliceTotal
                     progressBar.progress = sliceIndex
                     progressText.text = progressNum
@@ -86,6 +85,7 @@ class HomeFragment : Fragment() {
                     putBoolean("deleteOnFinish", deleteSlicesOnFinish)
                     putBoolean("downToInner", downloadToInner)
                     putBoolean("downToOuter", downloadToOuter)
+                    putInt("threadNumber", threadNumSlider.value.toInt())
                 }
 
                 scheduler = Scheduler(url, mHandler, settings)
@@ -111,8 +111,13 @@ class HomeFragment : Fragment() {
             downloadToInner = isChecked
         }
 
-        dOuterBtn.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            downloadToOuter = isChecked
+        dOuterBtn.setOnCheckedChangeListener { button: CompoundButton?, isChecked: Boolean ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                downloadToOuter = isChecked
+            } else {
+                button?.isChecked = false
+                Toast.makeText(context, "目前仅支持Android 10", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }

@@ -10,6 +10,7 @@ import java.io.*
 import java.nio.ByteBuffer
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
+import kotlin.concurrent.thread
 
 class Scheduler(url: String, mainHandler: Handler, settings: Bundle) {
     private val baseUrl = url
@@ -17,13 +18,14 @@ class Scheduler(url: String, mainHandler: Handler, settings: Bundle) {
     private val deleteOnFinish = settings.getBoolean("deleteOnFinish")
     private val downloadToInner = settings.getBoolean("downToInner")
     private val downloadToOuter = settings.getBoolean("downToOuter")
+    private val threadNumber = settings.getInt("threadNumber")
     private var cancelDownload = false
 
     fun start() {
-        Thread {
+        thread {
             val content = getContent(baseUrl)
             parseContent(content)
-        }.start()
+        }
     }
 
     fun stop() {
@@ -115,7 +117,7 @@ class Scheduler(url: String, mainHandler: Handler, settings: Bundle) {
             false
         }
 
-        val threadPool = Executors.newFixedThreadPool(4)
+        val threadPool = Executors.newFixedThreadPool(threadNumber)
         for (part in parts) {
             val sliceUrl = part.getSliceUrl()
             for (url in sliceUrl) {
@@ -125,7 +127,7 @@ class Scheduler(url: String, mainHandler: Handler, settings: Bundle) {
         threadPool.shutdown()
 
         // 开启监视线程 & 解密 & 合并
-        Thread {
+        thread {
             while (finishedSlice != totalSlice && !cancelDownload) {
                 val message = Message().apply {
                     what = 1
@@ -185,8 +187,9 @@ class Scheduler(url: String, mainHandler: Handler, settings: Bundle) {
 
                 message = Message().apply {
                     what = 3
-                    obj = "文件存储位置: Download/m3u8downloader/"+parts[0].getFolderName()
+                    obj = "文件存储位置: " + parts[0].getFolderName()
                 }
+                MainHandler.sendMessage(message)
             } else {
                 threadPool.shutdownNow()
                 val root = File(ContextUtil.context.filesDir.path)
@@ -198,7 +201,7 @@ class Scheduler(url: String, mainHandler: Handler, settings: Bundle) {
                 }
                 MainHandler.sendMessage(message)
             }
-        }.start()
+        }
     }
 
     private fun writeToSharedArea(parts: ArrayList<DiscontinuityPart>) {

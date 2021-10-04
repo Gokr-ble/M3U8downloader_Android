@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">m3u8downloader</string>
     <string name="hint_url">Download URL</string>
-    <string name="hint_delete_slice_switch">下载后删除分片</string>
+    <string name="hint_delete_slice_switch">自动删除分片</string>
     <string name="hint_auto_skip_ads">自动跳过广告</string>
     <string name="current_progress_hint">当前进度：</string>
     <string name="current_progress_numb">0/0</string>
@@ -17,4 +17,5 @@
     <string name="label_download_loc">下载位置</string>
     <string name="download_loc_inner">应用目录</string>
     <string name="download_loc_outer">/Download 目录</string>
+    <string name="thread_number">线程数量</string>
 </resources>

@@ -174,32 +174,72 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switch_delete_slices"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="5dp"
-                    android:text="@string/hint_delete_slice_switch"
-                    android:textSize="18sp"
-                    android:layout_gravity="center"
-                    android:checked="true"
-                    app:switchMinWidth="60dp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-<!--                <com.google.android.material.switchmaterial.SwitchMaterial-->
-<!--                    android:id="@+id/switch_skip_ads"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_marginTop="5dp"-->
-<!--                    android:layout_marginBottom="5dp"-->
-<!--                    android:paddingStart="10dp"-->
-<!--                    android:paddingEnd="5dp"-->
-<!--                    android:text="@string/hint_auto_skip_ads"-->
-<!--                    android:textSize="18sp"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    app:switchMinWidth="60dp"/>-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/thread_number"
+                        android:textSize="18sp"
+                        android:layout_gravity="center"
+                        android:paddingStart="10dp" />
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/thread_num_slider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:valueFrom="2"
+                        android:valueTo="8"
+                        android:value="5"
+                        android:stepSize="1"
+                        app:tickVisible="false"
+                        app:labelBehavior="floating"
+                        app:thumbColor="@color/blue_500"
+                        app:trackColor="@color/blue_200" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_toStartOf="@id/switch_delete_slices"
+                        android:paddingStart="10dp"
+                        android:text="@string/hint_delete_slice_switch"
+                        android:textSize="18sp" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_delete_slices"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:checked="true"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="15dp"
+                        app:switchMinWidth="60dp"
+                        app:thumbTint="@color/switch_thumb_color"
+                        app:trackTint="@color/switch_track_color" />
+
+                </RelativeLayout>
+
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -209,12 +249,12 @@
                         android:id="@+id/label_download_loc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/label_download_loc"
-                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginBottom="5dp"
                         android:paddingStart="10dp"
                         android:paddingEnd="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_centerVertical="true"/>
+                        android:text="@string/label_download_loc"
+                        android:textSize="18sp" />
 
                     <com.google.android.material.chip.ChipGroup
                         android:layout_width="wrap_content"
@@ -227,19 +267,19 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/btn_loc_inner"
-                            android:checkable="true"
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:checkable="true"
                             android:checked="true"
                             android:text="@string/download_loc_inner" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/btn_loc_outer"
-                            android:checkable="true"
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:checkable="true"
                             android:text="@string/download_loc_outer" />
 
                     </com.google.android.material.chip.ChipGroup>

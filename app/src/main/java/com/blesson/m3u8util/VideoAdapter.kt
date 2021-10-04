@@ -72,7 +72,7 @@ class VideoAdapter(data: ArrayList<String>) :
             val sec = diff / 1000
 
             if (sec <= 60) {
-                dateHint = "一分钟前"
+                dateHint = "1分钟前"
             } else if (min < 60) {
                 dateHint = "${min}分钟前"
             } else if (hour < 24) {
