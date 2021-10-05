@@ -14,19 +14,15 @@ class SliceMerger {
 
         val savePath = part.getSavePath()
         val partIndex = part.getPartIndex()
-        val name = "part$partIndex.mp4"
+        val name = "part${partIndex}.mp4"
 
         try {
-            val oStream = FileOutputStream("$savePath/$name")
-            val buffer = ByteArray(4096)
+            val oFile = File("${savePath}/${name}")
+
             for (file in destFile) {
-                val iStream = FileInputStream(file)
-                while (iStream.read(buffer) != -1) {
-                    oStream.write(buffer)
-                }
-                iStream.close()
+                val iStream = file.inputStream()
+                oFile.appendBytes(iStream.readBytes())
             }
-            oStream.close()
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -38,16 +34,13 @@ class SliceMerger {
 
         val partCount = parts.size
         try {
-            val oStream = FileOutputStream("$savePath/$newFileName.mp4")
-            val buffer = ByteArray(4096)
+            val oFile = File("${savePath}/${newFileName}.mp4")
+
             for (i in 0 until partCount) {
-                val iStream = FileInputStream("$savePath/part$i.mp4")
-                while(iStream.read(buffer) != -1) {
-                    oStream.write(buffer)
-                }
-                iStream.close()
+                val iFile = File("${savePath}/part${i}.mp4")
+                val iStream = iFile.inputStream()
+                oFile.writeBytes(iStream.readBytes())
             }
-            oStream.close()
         } catch (e: Exception) {
             e.printStackTrace()
         }

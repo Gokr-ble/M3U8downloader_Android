@@ -33,20 +33,21 @@ class Scheduler(url: String, mainHandler: Handler, settings: Bundle) {
     }
 
     private fun deleteAllFiles(root: File) {
-        val files = root.listFiles()
-        if (files != null) {
-            for (f in files) {
-                if (f.isDirectory) {
-                    deleteAllFiles(f)
-                    f.delete()
-                } else {
-                    if (f.exists()) {
-                        deleteAllFiles(f)
-                        f.delete()
-                    }
-                }
-            }
-        }
+//        val files = root.listFiles()
+        root.deleteRecursively()
+//        if (files != null) {
+//            for (f in files) {
+//                if (f.isDirectory) {
+//                    deleteAllFiles(f)
+//                    f.delete()
+//                } else {
+//                    if (f.exists()) {
+//                        deleteAllFiles(f)
+//                        f.delete()
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun getContent(baseUrl: String): String {
