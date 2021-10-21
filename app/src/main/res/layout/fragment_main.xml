@@ -262,7 +262,7 @@
                         android:layout_toEndOf="@id/label_download_loc"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
-                        app:singleSelection="false">
+                        app:singleSelection="true">
 
 
                         <com.google.android.material.chip.Chip

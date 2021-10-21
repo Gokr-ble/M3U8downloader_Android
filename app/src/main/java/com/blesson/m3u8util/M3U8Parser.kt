@@ -152,16 +152,36 @@ class M3U8Parser(url: String) {
 
     fun getSecondUrl(content: String): String {
         val lines = content.split("\n")
-        for (line in lines) {
-            if (line.contains(".m3u8")) {
-                if (line.contains("http")) {
-                    return line
-                } else {
-                    val split = baseUrl.split("/")
-                    return split[0] + "//" + split[2] + line
-                }
+        // 如果存在多种分辨率(码率)，分别解析并保存
+        val urls = ArrayList<Pair<Int, String>>()
+        for (i in 1 until lines.size step 2) {
+            if (lines[i].contains("BANDWIDTH")) {
+                val bandwidth = lines[i].split(",")[1].split("=")[1]
+                urls.add(Pair(bandwidth.toInt(), lines[i+1]))
             }
         }
+        // 选择最高码率下载
+        val maxBandwidth = urls.maxByOrNull { it.first }
+        val maxUrl = maxBandwidth?.second
+        if (maxUrl != null) {
+            return if (maxUrl.contains("http")) {
+                maxUrl
+            } else {
+                val split = baseUrl.split("/")
+                split[0] + "//" + split[2] + maxUrl
+            }
+        }
+
+//        for (line in lines) {
+//            if (line.contains(".m3u8")) {
+//                if (line.contains("http")) {
+//                    return line
+//                } else {
+//                    val split = baseUrl.split("/")
+//                    return split[0] + "//" + split[2] + line
+//                }
+//            }
+//        }
         return "获取重定向链接异常"
     }
 }
