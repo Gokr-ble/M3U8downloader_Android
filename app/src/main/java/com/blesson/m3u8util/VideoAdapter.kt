@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import java.io.File
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -52,12 +53,21 @@ class VideoAdapter(data: ArrayList<String>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val str = videoData[position]
-        val title = str.substring(0, str.lastIndexOf("/"))
+        val timeStr = str.substring(0, str.lastIndexOf("/"))
+
         var subtitle = str.substring(str.lastIndexOf("/") + 1)
         val path = ContextUtil.context.filesDir.path
 
         val dateTime = LocalDateTime.now()
-        //val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+        val formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val formatter2 = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+
+        val title = try {
+            LocalDateTime.parse(timeStr, formatter2).format(formatter1)
+        } catch (e: Exception) {
+            timeStr
+        }
+
 
         val f = File(path + File.separator + videoData[position])
         val videoDate = Date(f.lastModified())
@@ -71,15 +81,23 @@ class VideoAdapter(data: ArrayList<String>) :
             val min = ((diff / (60 * 1000)))
             val sec = diff / 1000
 
-            if (sec <= 60) {
-                dateHint = "1分钟前"
-            } else if (min < 60) {
-                dateHint = "${min}分钟前"
-            } else if (hour < 24) {
-                dateHint = "${hour}小时前"
-            } else {
-                dateHint = "${day}天前"
+            // 遵循kotlin规范，使用when代替级联if语句
+            dateHint = when {
+                sec <= 60 -> { "1分钟前" }
+                min  < 60 -> { "${min}分钟前" }
+                hour < 24 -> { "${hour}小时前" }
+                else -> { "${day}天前" }
             }
+
+//            if (sec <= 60) {
+//                dateHint = "1分钟前"
+//            } else if (min < 60) {
+//                dateHint = "${min}分钟前"
+//            } else if (hour < 24) {
+//                dateHint = "${hour}小时前"
+//            } else {
+//                dateHint = "${day}天前"
+//            }
 
             subtitle = "$subtitle-$dateHint"
         }
