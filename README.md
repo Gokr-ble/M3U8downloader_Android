@@ -81,15 +81,15 @@ ps: 正在计划使用kotlin重写整个项目
 
 ## 4. 程序运行截图
 
-<img src="MainActivity.png" alt="MainActivity" style="zoom: 50%;" />
+<img src="images/MainActivity.png" alt="MainActivity" style="zoom: 50%;" />
 
 ## 5. 程序整体架构图
 
-<img src="Architecture.png" alt="MainActivity" style="zoom: 50%;" />
+<img src="images/Architecture.png" alt="MainActivity" style="zoom: 50%;" />
 
 ## 6. 程序运行流程图
 
-<img src="flow.png" alt="MainActivity" style="zoom: 50%;" />
+<img src="images/flow.png" alt="MainActivity" style="zoom: 50%;" />
 
 > 1. 将用户输入的m3u8 URL传入Scheduler；
 > 2. Scheduler向Downloader传递URL；
