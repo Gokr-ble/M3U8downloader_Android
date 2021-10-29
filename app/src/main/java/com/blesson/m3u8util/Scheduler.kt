@@ -193,8 +193,8 @@ class Scheduler(url: String, mainHandler: Handler, settings: Bundle) {
                 MainHandler.sendMessage(message)
             } else {
                 threadPool.shutdownNow()
-                val root = File(ContextUtil.context.filesDir.path)
-                deleteAllFiles(root)
+                val fileRoot = File(ContextUtil.context.filesDir.path + File.separator + parts[0].getFolderName())
+                deleteAllFiles(fileRoot)
 
                 val message = Message().apply {
                     what = 4
