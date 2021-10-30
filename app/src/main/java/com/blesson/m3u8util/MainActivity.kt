@@ -11,6 +11,8 @@ class MainActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
     private val listFragment = VideoListFragment()
 
+    private lateinit var currentFragment: Fragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -19,6 +21,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initComponent() {
+        setDefaultFragment(homeFragment)
+
         val navigationView: BottomNavigationView = findViewById(R.id.bottom_nav)
         navigationView.setOnNavigationItemSelectedListener {
             if (it.itemId == R.id.navigation_home) {
@@ -35,14 +39,41 @@ class MainActivity : AppCompatActivity() {
                 changeFragment(listFragment)
             }
         }
-        changeFragment(homeFragment)
+    }
+
+    private fun setDefaultFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment, fragment)
+            .commit()
+        currentFragment = fragment
     }
 
     private fun changeFragment(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        fragmentManager.beginTransaction().apply {
-            replace(R.id.fragment, fragment)
-            commit()
+        // 以下方法Fragment会重载
+//        val fragmentManager = supportFragmentManager
+//        fragmentManager.beginTransaction().apply {
+//            replace(R.id.fragment, fragment)
+//            commit()
+//        }
+        // 以下方法Fragment不会重载
+        if (currentFragment != fragment) {
+            val transaction = supportFragmentManager.beginTransaction()
+            if (!fragment.isAdded) {
+                transaction.hide(currentFragment).add(R.id.fragment, fragment).commit()
+            } else {
+                transaction.hide(currentFragment).show(fragment).commit()
+            }
+
+//            if (fragment is HomeFragment) {
+//                if (!fragment.isAdded) {
+//                    transaction.hide(currentFragment).add(R.id.fragment, fragment).commit()
+//                } else {
+//                    transaction.hide(currentFragment).show(fragment).commit()
+//                }
+//            } else if (fragment is VideoListFragment) {
+//                transaction.replace(R.id.fragment, fragment).commit()
+//            }
+            currentFragment = fragment
         }
     }
 

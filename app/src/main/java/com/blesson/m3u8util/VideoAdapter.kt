@@ -99,7 +99,7 @@ class VideoAdapter(data: ArrayList<String>) :
 //                dateHint = "${day}天前"
 //            }
 
-            subtitle = "$subtitle-$dateHint"
+            subtitle = "$subtitle - $dateHint"
         }
 
         holder.itemTitle.text = title
@@ -154,6 +154,17 @@ class VideoAdapter(data: ArrayList<String>) :
 
     override fun getItemCount(): Int {
         return videoData.size
+    }
+
+    fun updateVideoData(newData: ArrayList<String>) {
+        videoData.clear()
+        videoData.addAll(newData)
+        notifyDataSetChanged()
+    }
+
+    fun addVideoData(data: String) {
+        videoData.add(data)
+        notifyItemInserted(itemCount)
     }
 
 }

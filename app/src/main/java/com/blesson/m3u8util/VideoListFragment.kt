@@ -7,19 +7,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import java.io.File
 
 class VideoListFragment : Fragment(){
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_list, container, false)
-    }
+        val view = inflater.inflate(R.layout.fragment_list, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val data = prepareData()
+        val dataSize = data.size
         val layoutManager = LinearLayoutManager(context)
         val adapter = VideoAdapter(data)
         val recyclerView: RecyclerView = view.findViewById(R.id.videoList)
@@ -27,6 +28,25 @@ class VideoListFragment : Fragment(){
             setLayoutManager(layoutManager)
             setAdapter(adapter)
         }
+
+        //TODO 下拉刷新
+        // https://cdn.workgreat14.live//m3u8/547509/547509.m3u8?st=NOUxRTmQCUYJFU7x66mcRw&e=1635568589
+        val swipeRefresh: SwipeRefreshLayout = view.findViewById(R.id.swipeRefresh)
+        swipeRefresh.setColorSchemeResources(R.color.blue_500)
+        swipeRefresh.setOnRefreshListener {
+            val newData = prepareData()
+            if(newData.size != dataSize) {
+//                adapter.notifyItemInserted(dataSize+1)
+                adapter.updateVideoData(newData)
+            }
+            swipeRefresh.isRefreshing = false
+        }
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
     }
 
     private fun prepareData(): ArrayList<String> {
