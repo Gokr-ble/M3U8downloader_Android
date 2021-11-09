@@ -7,25 +7,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@android:color/transparent"
-            app:title=""
-            app:titleMarginStart="40dp"
-            app:logo="@drawable/ic_logo"
-            app:logoDescription="">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/toolbar_title_text"
-                android:textSize="22sp"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:textStyle="bold"/>
-
-        </com.google.android.material.appbar.MaterialToolbar>
 
 
         <com.google.android.material.card.MaterialCardView

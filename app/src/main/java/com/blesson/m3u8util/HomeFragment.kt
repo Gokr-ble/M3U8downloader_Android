@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.blesson.m3u8util.model.SharedViewModel
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class HomeFragment : Fragment() {
-
-//    private lateinit var mHandler: Handler
 
     private var isWorking = false
     private var deleteSlicesOnFinish = true
@@ -22,17 +22,14 @@ class HomeFragment : Fragment() {
 
 //    private lateinit var settings: Bundle
     private lateinit var scheduler: Scheduler
+    private lateinit var viewModel: SharedViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_main, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        val view = inflater.inflate(R.layout.fragment_main, container, false)
 
         val textUrl: EditText = view.findViewById(R.id.text_url)
         val deleteSlicesSwitch: SwitchMaterial = view.findViewById(R.id.switch_delete_slices)
@@ -44,6 +41,9 @@ class HomeFragment : Fragment() {
         val dInnerBtn: Chip = view.findViewById(R.id.btn_loc_inner)
         val dOuterBtn: Chip = view.findViewById(R.id.btn_loc_outer)
         val threadNumSlider: Slider = view.findViewById(R.id.thread_num_slider)
+
+        viewModel = ViewModelProvider(activity!!)[SharedViewModel::class.java]
+        viewModel.setDownloadState(false)
 
         val mHandler = Handler(Looper.getMainLooper()) {
             when (it.what) {
@@ -60,6 +60,7 @@ class HomeFragment : Fragment() {
                     progressStat.text = it.obj.toString()
                 }
                 3 -> {  // 下载完成
+                    viewModel.setDownloadState(true)
                     Toast.makeText(context, it.obj.toString(), Toast.LENGTH_SHORT).show()
                     isWorking = false
                 }
@@ -119,6 +120,11 @@ class HomeFragment : Fragment() {
                 Toast.makeText(context, "目前仅支持Android 10", Toast.LENGTH_SHORT).show()
             }
         }
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
     }
 

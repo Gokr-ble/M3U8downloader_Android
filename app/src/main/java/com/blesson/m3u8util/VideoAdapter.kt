@@ -3,7 +3,6 @@ package com.blesson.m3u8util
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.blesson.m3u8util.utils.ContextUtil
 import java.io.File
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -89,16 +88,6 @@ class VideoAdapter(data: ArrayList<String>) :
                 else -> { "${day}天前" }
             }
 
-//            if (sec <= 60) {
-//                dateHint = "1分钟前"
-//            } else if (min < 60) {
-//                dateHint = "${min}分钟前"
-//            } else if (hour < 24) {
-//                dateHint = "${hour}小时前"
-//            } else {
-//                dateHint = "${day}天前"
-//            }
-
             subtitle = "$subtitle - $dateHint"
         }
 
@@ -157,9 +146,12 @@ class VideoAdapter(data: ArrayList<String>) :
     }
 
     fun updateVideoData(newData: ArrayList<String>) {
-        videoData.clear()
-        videoData.addAll(newData)
-        notifyDataSetChanged()
+        if (newData.size != videoData.size) {
+            videoData.clear()
+            videoData.addAll(newData)
+            notifyItemInserted(0)
+
+        }
     }
 
     fun addVideoData(data: String) {

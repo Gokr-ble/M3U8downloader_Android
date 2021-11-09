@@ -1,14 +1,14 @@
 package com.blesson.m3u8util
 
-import android.content.ContentResolver
 import android.content.ContentValues
 import android.os.*
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
+import com.blesson.m3u8util.model.DiscontinuityPart
+import com.blesson.m3u8util.utils.*
 import java.io.*
 import java.nio.ByteBuffer
-import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import kotlin.concurrent.thread
 

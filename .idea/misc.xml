@@ -3,10 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProject/m3u8util/app/src/main/res/drawable/ic_github.xml" value="0.265625" />
         <entry key="..\:/AndroidProject/m3u8util/app/src/main/res/drawable/switch_track.xml" value="0.2515625" />
         <entry key="..\:/AndroidProject/m3u8util/app/src/main/res/drawable/switch_track_off.xml" value="0.2515625" />
         <entry key="..\:/AndroidProject/m3u8util/app/src/main/res/drawable/switch_track_on.xml" value="0.2515625" />
-        <entry key="..\:/AndroidProject/m3u8util/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/AndroidProject/m3u8util/app/src/main/res/layout/activity_main.xml" value="0.4" />
         <entry key="..\:/AndroidProject/m3u8util/app/src/main/res/layout/fragment_list.xml" value="0.536" />
         <entry key="..\:/AndroidProject/m3u8util/app/src/main/res/layout/fragment_main.xml" value="0.4" />
         <entry key="..\:/AndroidProject/m3u8util/app/src/main/res/layout/video_item.xml" value="0.25" />

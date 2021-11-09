@@ -5,12 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.blesson.m3u8util.model.SharedViewModel
+import com.blesson.m3u8util.utils.ContextUtil
 import java.io.File
 
 class VideoListFragment : Fragment(){
+
+    private lateinit var viewModel: SharedViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,7 +26,6 @@ class VideoListFragment : Fragment(){
         val view = inflater.inflate(R.layout.fragment_list, container, false)
 
         val data = prepareData()
-        val dataSize = data.size
         val layoutManager = LinearLayoutManager(context)
         val adapter = VideoAdapter(data)
         val recyclerView: RecyclerView = view.findViewById(R.id.videoList)
@@ -29,18 +34,24 @@ class VideoListFragment : Fragment(){
             setAdapter(adapter)
         }
 
-        //TODO 下拉刷新
-        // https://cdn.workgreat14.live//m3u8/547509/547509.m3u8?st=NOUxRTmQCUYJFU7x66mcRw&e=1635568589
         val swipeRefresh: SwipeRefreshLayout = view.findViewById(R.id.swipeRefresh)
         swipeRefresh.setColorSchemeResources(R.color.blue_500)
         swipeRefresh.setOnRefreshListener {
             val newData = prepareData()
-            if(newData.size != dataSize) {
-//                adapter.notifyItemInserted(dataSize+1)
-                adapter.updateVideoData(newData)
-            }
+            adapter.updateVideoData(newData)
+            recyclerView.scrollToPosition(0)
             swipeRefresh.isRefreshing = false
         }
+
+
+        viewModel = ViewModelProvider(activity!!)[SharedViewModel::class.java]
+        viewModel.downloadFinish.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                adapter.updateVideoData(prepareData())
+                recyclerView.scrollToPosition(0)
+            }
+        })
+
 
         return view
     }
@@ -62,7 +73,7 @@ class VideoListFragment : Fragment(){
                     }
                 }
             }
-            data.sortWith(Comparator.naturalOrder())
+            data.sortWith(Comparator.reverseOrder())
         }
         return data
     }
