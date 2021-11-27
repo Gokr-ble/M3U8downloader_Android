@@ -30,6 +30,8 @@ class VideoAdapter(data: ArrayList<String>) :
 
     private val videoData = data
 
+    private var isFileLocked = true
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.video_item, parent, false)
         val viewHolder = ViewHolder(view)
@@ -82,7 +84,7 @@ class VideoAdapter(data: ArrayList<String>) :
 
             // 遵循kotlin规范，使用when代替级联if语句
             dateHint = when {
-                sec <= 60 -> { "1分钟前" }
+                sec <= 60 -> { "刚刚" }
                 min  < 60 -> { "${min}分钟前" }
                 hour < 24 -> { "${hour}小时前" }
                 else -> { "${day}天前" }
@@ -123,20 +125,25 @@ class VideoAdapter(data: ArrayList<String>) :
 
         holder.itemView.setOnClickListener {
             // 通过Content Provider调用外部app打开视频
-            try {
-                // 通过Content Provider调用外部打开视频
-                val videoFile = File(path + File.separator + videoData[position])
-                val outUri = FileProvider.getUriForFile(it.context, it.context.packageName+".fileProvider", videoFile)
-                val intent = Intent(Intent.ACTION_VIEW).apply {
-                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    setDataAndType(outUri, "video/*")
-                }
-                it.context.startActivity(intent)
+            // 默认文件锁定
+            if (!isFileLocked) {
+                try {
+                    // 通过Content Provider调用外部打开视频
+                    val videoFile = File(path + File.separator + videoData[position])
+                    val outUri = FileProvider.getUriForFile(it.context, it.context.packageName+".fileProvider", videoFile)
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        setDataAndType(outUri, "video/*")
+                    }
+                    it.context.startActivity(intent)
 
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Toast.makeText(it.context, "打开失败", Toast.LENGTH_SHORT).show();
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(it.context, "打开失败", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(ContextUtil.context, "请先点击右上方解锁按钮", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -146,17 +153,16 @@ class VideoAdapter(data: ArrayList<String>) :
     }
 
     fun updateVideoData(newData: ArrayList<String>) {
-        if (newData.size != videoData.size) {
+        if (newData.size > videoData.size) {
             videoData.clear()
             videoData.addAll(newData)
             notifyItemInserted(0)
-
+            notifyItemRangeChanged(0, videoData.size)
         }
     }
 
-    fun addVideoData(data: String) {
-        videoData.add(data)
-        notifyItemInserted(itemCount)
+    fun setFileLockedState(state: Boolean) {
+        isFileLocked = state
     }
 
 }

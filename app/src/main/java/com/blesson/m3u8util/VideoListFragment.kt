@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.blesson.m3u8util.model.MainViewModel
 import com.blesson.m3u8util.model.SharedViewModel
 import com.blesson.m3u8util.utils.ContextUtil
 import java.io.File
@@ -45,13 +46,17 @@ class VideoListFragment : Fragment(){
 
 
         viewModel = ViewModelProvider(activity!!)[SharedViewModel::class.java]
-        viewModel.downloadFinish.observe(viewLifecycleOwner, Observer {
+        viewModel.downloadFinish.observe(viewLifecycleOwner, {
             if (it) {
                 adapter.updateVideoData(prepareData())
-                recyclerView.scrollToPosition(0)
+//                recyclerView.scrollToPosition(0)
             }
         })
 
+        val mainViewModel = ViewModelProvider(activity!!)[MainViewModel::class.java]
+        mainViewModel.isFileLocked.observe(viewLifecycleOwner, {
+            adapter.setFileLockedState(it)
+        })
 
         return view
     }

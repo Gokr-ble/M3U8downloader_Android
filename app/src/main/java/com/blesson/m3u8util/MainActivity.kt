@@ -2,8 +2,11 @@ package com.blesson.m3u8util
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.ListFragment
+import androidx.lifecycle.ViewModelProvider
+import com.blesson.m3u8util.model.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -11,7 +14,11 @@ class MainActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
     private val listFragment = VideoListFragment()
 
+    private var isFileLocked = true
+
     private lateinit var currentFragment: Fragment
+
+    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +46,22 @@ class MainActivity : AppCompatActivity() {
                 changeFragment(listFragment)
             }
         }
+
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+
+        val btnLockFile: ImageView = findViewById(R.id.btn_lock_file)
+        btnLockFile.setOnClickListener {
+            if (isFileLocked) {
+                isFileLocked = false
+                mainViewModel.setFileLocked(false)
+                btnLockFile.setImageResource(R.drawable.ic_unlocked)
+            } else {
+                isFileLocked = true
+                mainViewModel.setFileLocked(true)
+                btnLockFile.setImageResource(R.drawable.ic_locked)
+            }
+        }
+
     }
 
     private fun setDefaultFragment(fragment: Fragment) {
@@ -63,16 +86,6 @@ class MainActivity : AppCompatActivity() {
             } else {
                 transaction.hide(currentFragment).show(fragment).commit()
             }
-
-//            if (fragment is HomeFragment) {
-//                if (!fragment.isAdded) {
-//                    transaction.hide(currentFragment).add(R.id.fragment, fragment).commit()
-//                } else {
-//                    transaction.hide(currentFragment).show(fragment).commit()
-//                }
-//            } else if (fragment is VideoListFragment) {
-//                transaction.replace(R.id.fragment, fragment).commit()
-//            }
             currentFragment = fragment
         }
     }
